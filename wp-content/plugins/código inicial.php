@@ -1,4 +1,4 @@
-<h3><?php echo ( ! empty ( $content ) ) ? esc_html( $content ) : esc_html( MV_Slider_Settings::$options['mv_slider_title'] ); ?></h3>
+<h3>Title</h3>
 <div class="mv-slider flexslider ">
     <ul class="slides">
         <li>
