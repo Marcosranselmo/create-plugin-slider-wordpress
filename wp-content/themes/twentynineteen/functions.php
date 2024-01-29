@@ -27,6 +27,7 @@ if ( ! function_exists( 'twentynineteen_setup' ) ) :
 	 */
 	function twentynineteen_setup() {
 
+		add_theme_support( 'mv-testimonials' );
 		// Add default posts and comments RSS feed links to head.
 		add_theme_support( 'automatic-feed-links' );
 
