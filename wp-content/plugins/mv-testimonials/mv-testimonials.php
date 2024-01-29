@@ -46,8 +46,10 @@ if( !class_exists( 'MV_Testimonials' ) ){
             $MVTestimonialsPostType = new MV_Testimonials_Post_Type();
 
             require_once( MV_TESTIMONIALS_PATH . 'widgets/class.mv-testimonials-widget.php' );
-            $MVTestimonialsWidget = new MV_Testimonials_Widget();           
-
+            $MVTestimonialsWidget = new MV_Testimonials_Widget();   
+            
+            add_filter( 'archive_template', array( $this, 'load_custom_archive_template' ) );
+            add_filter( 'single_template', array( $this, 'load_custom_single_template' ) );
         }
 
          /**
@@ -58,6 +60,24 @@ if( !class_exists( 'MV_Testimonials' ) ){
             define ( 'MV_TESTIMONIALS_PATH', plugin_dir_path( __FILE__ ) );
             define ( 'MV_TESTIMONIALS_URL', plugin_dir_url( __FILE__ ) );
             define ( 'MV_TESTIMONIALS_VERSION', '1.0.0' );     
+        }
+
+        public function load_custom_archive_template( $tpl ){
+            if( current_theme_supports( 'mv-testimonials' ) ){
+                if( is_post_type_archive( 'mv-testimonials' ) ){
+                    $tpl = MV_TESTIMONIALS_PATH . 'views/templates/archive-mv-testimonials.php';
+                }
+            }
+            return $tpl;
+        }
+
+        public function load_custom_single_template( $tpl ){
+            if( current_theme_supports( 'mv-testimonials' ) ){
+                if( is_singular( 'mv-testimonials' ) ){
+                    $tpl = MV_TESTIMONIALS_PATH . 'views/templates/single-mv-testimonials.php';
+                }
+            }
+            return $tpl;
         }
 
         /**
