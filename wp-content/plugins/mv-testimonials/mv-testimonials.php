@@ -120,6 +120,19 @@ if( !class_exists( 'MV_Testimonials' ) ){
          */
         public static function uninstall(){
 
+            delete_option( 'widget_mv-testimonials' );
+
+            $posts = get_posts(
+                array(
+                    'post_type' => 'mv-testimonials',
+                    'number_posts'  => -1,
+                    'post_status'   => 'any'
+                )
+            );
+
+            foreach( $posts as $post ){
+                wp_delete_post( $post->ID, true );
+            }
         }
 
     }
