@@ -1,6 +1,7 @@
 <?php get_header(); ?>
 <div class="mv-testimonials-single">
     <header class="entry-header">
+        <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
     </header>
 
         <?php
@@ -24,7 +25,6 @@
                     <?php the_content(); ?>
                 </div>
                 <div class="meta">
-                        <?php the_title( '<h3 class="entry-title">', '</h3>' ); ?>
                         <span class="occupation"><?php echo esc_html( $occupation_meta ); ?></span>
                         <span class="company"><a href="<?php echo esc_attr( $url_meta ) ?>"><?php echo esc_html( $company_meta ); ?></a></span>          
                 </div>

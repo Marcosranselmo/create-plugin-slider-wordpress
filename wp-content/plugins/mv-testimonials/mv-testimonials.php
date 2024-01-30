@@ -39,6 +39,8 @@ if( !class_exists( 'MV_Testimonials' ) ){
 
         public function __construct() {
 
+            $this->load_textdomain();
+
             // Define constants used througout the plugin
             $this->define_constants(); 
             
@@ -59,13 +61,14 @@ if( !class_exists( 'MV_Testimonials' ) ){
             // Path/URL to root of this plugin, with trailing slash.
             define ( 'MV_TESTIMONIALS_PATH', plugin_dir_path( __FILE__ ) );
             define ( 'MV_TESTIMONIALS_URL', plugin_dir_url( __FILE__ ) );
-            define ( 'MV_TESTIMONIALS_VERSION', '1.0.0' );     
+            define ( 'MV_TESTIMONIALS_VERSION', '1.0.0' );  
+            define ( 'MV_TESTIMONIALS_OVERRIDE_PATH_DIR', get_stylesheet_directory() . '/mv-testimonials/' );   
         }
 
         public function load_custom_archive_template( $tpl ){
             if( current_theme_supports( 'mv-testimonials' ) ){
                 if( is_post_type_archive( 'mv-testimonials' ) ){
-                    $tpl = MV_TESTIMONIALS_PATH . 'views/templates/archive-mv-testimonials.php';
+                    $tpl = $this->get_template_part_location( 'archive-mv-testimonials.php' );
                 }
             }
             return $tpl;
@@ -74,10 +77,27 @@ if( !class_exists( 'MV_Testimonials' ) ){
         public function load_custom_single_template( $tpl ){
             if( current_theme_supports( 'mv-testimonials' ) ){
                 if( is_singular( 'mv-testimonials' ) ){
-                    $tpl = MV_TESTIMONIALS_PATH . 'views/templates/single-mv-testimonials.php';
+                    $tpl = $this->get_template_part_location( 'single-mv-testimonials.php' );
                 }
             }
             return $tpl;
+        }
+
+        public function get_template_part_location( $file ){
+            if( file_exists( MV_TESTIMONIALS_OVERRIDE_PATH_DIR . $file ) ){
+                $file = MV_TESTIMONIALS_OVERRIDE_PATH_DIR . $file;
+            }else{
+                $file = MV_TESTIMONIALS_PATH . 'views/templates/' . $file;
+            }
+            return $file;
+        }
+
+        public function load_textdomain(){
+            load_plugin_textdomain(
+                'mv-testimonials',
+                false,
+                dirname( plugin_basename( __FILE__ ) ) . '/languages/'
+            );
         }
 
         /**
