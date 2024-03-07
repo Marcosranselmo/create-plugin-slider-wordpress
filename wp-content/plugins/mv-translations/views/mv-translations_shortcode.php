@@ -121,7 +121,8 @@ $q = $wpdb->prepare(
     $current_user->ID
 );
 $results = $wpdb->get_results( $q );
-var_dump( $results );
+
+if( $wpdb->num_rows ):
 ?>
             <table>
                 <caption><?php esc_html_e( 'Your Translations', 'mv-translations' ); ?></caption>
@@ -135,15 +136,19 @@ var_dump( $results );
                         <th><?php esc_html_e( 'Status', 'mv-translations' ); ?></th>
                     </tr>
                 </thead>  
-                <tbody>  
+                <tbody>
+                <?php foreach( $results as $result ): ?>  
                     <tr>
-                        <td>Date</td>
-                        <td>Title</td>
-                        <td>Transliteraton</td>
-                        <td>Edit</td>
-                        <td>Delete</td>
-                        <td>Status</td>
+                        <td><?php echo esc_html( date( 'M/d/Y', strtotime( $result->post_date ) ) ); ?></td>
+                        <td><?php echo esc_html( $result->post_title ); ?></td>
+                        <td><?php echo $result->meta_value == 'Yes' ? esc_html__( 'Yes', 'mv-translations' ) : esc_html__( 'No', 'mv-translations' ); ?></td>
+                        <?php $edit_post = add_query_arg( 'post', $result->ID, home_url( '/edit-translation' ) ); ?>
+                        <td><a href="<?php echo esc_url( $edit_post );  ?>"><?php esc_html_e( 'Edit', 'mv-translations' ); ?></a></td>
+                        <td><a onclick="return confirm( 'Are you sure you want to delete post: <?php echo $result->post_title ?>?' )" href="<?php echo get_delete_post_link( $result->ID, "", true ); ?>"><?php esc_html_e( 'Delete', 'mv-translations' ); ?></a></td>
+                        <td><?php echo $result->post_status == 'publish' ? esc_html__( 'Published', 'mv-translations' ) : esc_html__( 'Pending', 'mv-translations' ); ?></td>
                     </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
+<?php endif; ?>
 </div>
